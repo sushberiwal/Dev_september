@@ -4,7 +4,9 @@
 let request = require("request");
 let fs = require("fs");
 let cheerio = require("cheerio");
-const getAllMatches = require("./allMatches");
+// object destructuring
+const { getAllMatches } = require("./allMatches");
+
 
 let link = "https://www.espncricinfo.com/series/_/id/8039/season/2019/icc-cricket-world-cup";
 
