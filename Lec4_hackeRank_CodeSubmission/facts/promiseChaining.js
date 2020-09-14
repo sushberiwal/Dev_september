@@ -24,6 +24,7 @@ return f3KaPromise;
   console.log(error);
 });
 
-
 console.log("After");
+
+
 
