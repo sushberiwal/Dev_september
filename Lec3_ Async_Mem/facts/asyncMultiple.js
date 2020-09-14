@@ -1,7 +1,7 @@
 let fs = require("fs");
 
 // Async Task
-// mulitple files => Parallely
+// mulitple files => Serially
 
 console.log("Before");
 
