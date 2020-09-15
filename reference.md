@@ -10,3 +10,7 @@
 * https://www.w3schools.com/js/js_json_intro.asp
 ## Puppeteer
 * https://pptr.dev/
+## Promises
+* https://javascript.info/
+
+
