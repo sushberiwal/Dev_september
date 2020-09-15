@@ -1,27 +1,16 @@
 let fs = require("fs");
 
 function fileReader(fPath){
-    let pendingPromise = new Promise( function(resolve , reject){
-        fs.readFile( fPath , cb );
-        function cb(err , data){
-            if(err == null){
-                resolve(data);
-            }
-            else{
-                reject(err);
-            }
-        }
+    return new Promise( function(resolve , reject){
+       if(fPath == true){
+           resolve("abjshdbasbdjhabsjdbajsdbjhasbdjabnsdhbads");
+       }else{
+           reject("ajksdnjkasndkjansdjknasjkdnajksdnjkasndjkabbsjdknbahsd");
+       }
     });
-    return pendingPromise;
 }
 
-
-
-
-
-let pendingPromise = fileReader("./f1.txt");
-
-
+let pendingPromise = fileReader(true);
 pendingPromise.then(function(data){
 console.log("Content " + data);
 })
@@ -29,3 +18,4 @@ console.log("Content " + data);
 pendingPromise.catch(function(err){
 console.log(err);
 })
+
