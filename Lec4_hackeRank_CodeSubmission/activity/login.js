@@ -73,13 +73,25 @@ browserPromise
     return allLinks;
   })
   .then(function (allLinks) {
-    let link = allLinks[0];
-    let completeLink = `https://www.hackerrank.com${link}`;
-    let questionSolvedPromise = questionSubmitter(completeLink);
+    // let completeLinks = allLinks.map( function(link) {
+    //   return `https://www.hackerrank.com${link}`;
+    // })
+    let completeLinks = [];
+    for(let i=0 ; i<allLinks.length ; i++){
+      let completeLink = `https://www.hackerrank.com${allLinks[i]}`;
+      completeLinks.push(completeLink);
+    }
+
+    let questionSolvedPromise = questionSubmitter(completeLinks[0]);
+    for(let i=1 ; i<completeLinks.length ; i++){
+         questionSolvedPromise =  questionSolvedPromise.then(function(){
+           return questionSubmitter(completeLinks[i]);
+         })
+    }
     return questionSolvedPromise;
   })
   .then(function () {
-    console.log("one question solved !!!!");
+    console.log("All Questions Solved !!!!");
   })
   .catch(function (err) {
     console.log(err);
@@ -223,10 +235,10 @@ function questionSubmitter(qLink) {
         let waitAndClickedPromise = waitAndClick('a[data-attr2="Editorial"]');
         return waitAndClickedPromise;
       })
-      //  .then(function(){
-      //    let handleLockBtnPromise = handleLockBtn();
-      //    return handleLockBtnPromise;
-      //  })
+       .then(function(){
+         let handleLockBtnPromise = handleLockBtn();
+         return handleLockBtnPromise;
+       })
       .then(function () {
         let getCodePromise = getCode();
         return getCodePromise;
