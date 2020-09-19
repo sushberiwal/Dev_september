@@ -19,8 +19,8 @@ browserPromise
   .then(function (pages) {
     // array of all the pages opened
     let page = pages[0];
-    tab = page;
-
+    // page.setDefaultTimeout(10000);
+    tab= page;
     let loginPagePromise = page.goto("https://www.hackerrank.com/auth/login");
     return loginPagePromise;
   })
@@ -167,12 +167,16 @@ function getCode() {
 
 function handleLockBtn() {
   return new Promise(function (resolve, reject) {
-    let waitPromise = waitAndClick(".ui-btn.ui-btn-normal.ui-btn-primary");
+    let waitPromise = tab.waitForSelector(".ui-btn.ui-btn-normal.ui-btn-primary", { visible: true });
     waitPromise.then(function () {
       console.log("lock btn found");
+      let clickedPromise = tab.click(".ui-btn.ui-btn-normal.ui-btn-primary" , {clickCount:3});
+      return clickedPromise;
+    })
+    .then(function(){
       resolve();
-    });
-    waitPromise.catch(function (err) {
+    })
+    .catch(function (err) {
       console.log("lock btn not found");
       resolve();
     });
