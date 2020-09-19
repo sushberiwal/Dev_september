@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 const { id, pw } = require("./credentials");
-
-
+let challenges = require("./challenges");
+let tab;
 
 (async function(){
     try{
@@ -13,6 +13,8 @@ const { id, pw } = require("./credentials");
           });
         let allPages = await browser.pages();
         let page = allPages[0];
+        tab = page;
+        
         await page.goto("https://www.hackerrank.com/auth/login");
         // console.log("opened login page");
         await page.type("#input-1", id);
@@ -24,8 +26,8 @@ const { id, pw } = require("./credentials");
         let aTags = await page.$$(".nav-tabs.nav.admin-tabbed-nav li a");
         await Promise.all([  page.waitForNavigation({waitUntil:"networkidle0"})   , aTags[1].click() ]);
         let url = await page.url();
-
-        
+        await Promise.all([ page.waitForNavigation({waitUntil:"networkidle0"}) , page.click('.btn.btn-green.backbone.pull-right')]);
+        await createChallenge(challenges[0]);
         // console.log("Clicked on admin page !!!");
     }
     catch(err){
@@ -33,5 +35,28 @@ const { id, pw } = require("./credentials");
     }
 
 })();
+
+
+async function createChallenge(challenge){
+    let challengeName = challenge["Challenge Name"];
+    let description = challenge["Description"];
+    let probStatement = challenge["Problem Statement"];
+    let input = challenge["Input Format"];
+    let constraints = challenge["Constraints"];
+    let output = challenge["Output Format"];
+    let tags = challenge["Tags"];
+
+    await tab.waitForSelector('#name' , {visible:true});
+    await tab.type("#name" , challengeName);
+    await tab.type("#preview" , description);
+    await tab.type("#problem_statement-container .CodeMirror textarea" , probStatement);
+    await tab.type("#input_format-container .CodeMirror textarea" , input);
+    await tab.type("#constraints-container .CodeMirror textarea" , constraints);
+    await tab.type("#output_format-container .CodeMirror textarea" , output);
+    await tab.type("#tags_tag" , tags);
+    await tab.keyboard.press("Enter");
+    await tab.click(".save-challenge.btn.btn-green");
+
+}
 
 
