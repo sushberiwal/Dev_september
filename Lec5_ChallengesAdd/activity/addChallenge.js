@@ -19,15 +19,20 @@ let tab;
         // console.log("opened login page");
         await page.type("#input-1", id);
         await page.type("#input-2", pw);
-        await Promise.all([ page.waitForNavigation({waitUntil:"networkidle0"}) , page.click(".ui-btn.ui-btn-large.ui-btn-primary.auth-button") ]);
-        // await page.waitForSelector('a[data-analytics="NavBarProfileDropDown"]' , {visible:true});
+        await clickAndWait(".ui-btn.ui-btn-large.ui-btn-primary.auth-button");
         await page.click('a[data-analytics="NavBarProfileDropDown"]');
-        await Promise.all([ page.waitForNavigation({waitUntil:"networkidle0"}) , page.click('a[data-analytics="NavBarProfileDropDownAdministration"]')]);
+        await clickAndWait('a[data-analytics="NavBarProfileDropDownAdministration"]');
         let aTags = await page.$$(".nav-tabs.nav.admin-tabbed-nav li a");
         await Promise.all([  page.waitForNavigation({waitUntil:"networkidle0"})   , aTags[1].click() ]);
         let url = await page.url();
-        await Promise.all([ page.waitForNavigation({waitUntil:"networkidle0"}) , page.click('.btn.btn-green.backbone.pull-right')]);
+        await clickAndWait('.btn.btn-green.backbone.pull-right');
         await createChallenge(challenges[0]);
+        for(let i=1 ; i<challenges.length ; i++){
+            await Promise.all( [ page.waitForNavigation({waitUntil:"networkidle0"}) , page.goto(url) ]);   
+            await clickAndWait('.btn.btn-green.backbone.pull-right');
+            await createChallenge(challenges[i]);
+        }
+        await page.goto(url);
         // console.log("Clicked on admin page !!!");
     }
     catch(err){
@@ -35,6 +40,15 @@ let tab;
     }
 
 })();
+
+async function clickAndWait(selector){
+    try{
+        await Promise.all([ tab.waitForNavigation({waitUntil:"networkidle0"}) ,tab.click(selector)]);
+    }
+    catch(err){
+        console.log(err);
+    }
+}
 
 
 async function createChallenge(challenge){
