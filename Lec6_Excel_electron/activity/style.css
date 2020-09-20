@@ -1,0 +1,49 @@
+*{
+box-sizing: border-box;
+}
+
+html,body{
+    margin: 0px;
+    padding: 0px;
+}
+
+.menu-container{
+    border: 1px solid;
+    height: 35px;
+}
+.formula{
+    border: 1px solid;
+    height: 35px;
+}
+
+.file{
+
+}
+
+.home{
+
+}
+
+.menu-options-container{
+    border: 1px solid red;
+    height: 50px;
+}
+.file-options{
+
+}
+.home-options{
+
+}
+
+.content{
+    border: 1px solid;
+    height: calc(100vh - 155px);
+
+}
+.cells{
+
+}
+.sheets{
+border: 1px solid green;
+    height: 35px;
+}
