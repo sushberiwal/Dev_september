@@ -5,10 +5,13 @@
 // for mac - sudo npm install electron --save -dev
 // add in scripts
 // "start" : "electron ."
-
+// npm install ejs-electron
+// sudo npm install ejs-electron
 
 // boiler plate code of electron
 const electron = require('electron');
+const ejs = require('ejs-electron')
+
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -22,7 +25,7 @@ function createWindow(){
           }
     })
 
-    win.loadFile("./index.html").then(function(){
+    win.loadFile("./index.ejs").then(function(){
         win.maximize();
     });
     win.webContents.openDevTools();

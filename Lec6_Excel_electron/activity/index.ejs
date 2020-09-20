@@ -9,29 +9,33 @@
 <body>
     <div class="menu-container">
         Menu 
-        <div class="file"></div>
-        <div class="home"></div>
     </div>
     
     <div class="menu-options-container">
         Menu Options
-        <div class="file-options"></div>
-        <div class="home-options"></div>
     </div>
 
     <div class="formula">
         Formula
     </div>
-
+    
     <div class="content">
-        Content
-        <div class="cells"></div>
+        
+        <div class="cells">
+            <% for(let i=0 ; i<100 ; i++) {%>
+                <div class="row">
+                    <%for(let j=0 ; j<26 ; j++){%>
+                        <div class="cell" contenteditable="true"></div>
+                        <%}%>
+                </div>
+                <%}%>
+        </div>
+
     </div>
 
     <div class="sheets">
         Sheets
     </div>
-
 
 </body>
 </html>

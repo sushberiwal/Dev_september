@@ -38,10 +38,19 @@ html,body{
 .content{
     border: 1px solid;
     height: calc(100vh - 155px);
-
+    background: antiquewhite;
+    overflow: auto;
 }
 .cells{
 
+}
+.row{
+    display: flex;
+}
+.cell{
+    min-height: 25px;
+    border: 1px solid;
+    min-width: 70px;      
 }
 .sheets{
 border: 1px solid green;
