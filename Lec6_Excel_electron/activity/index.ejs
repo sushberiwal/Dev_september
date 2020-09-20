@@ -16,7 +16,8 @@
     </div>
 
     <div class="formula">
-        Formula
+        <input type="text" class="address" readonly>
+        <input type="text" class="cell-formula">
     </div>
     
     <div class="content">
@@ -25,7 +26,7 @@
             <% for(let i=0 ; i<100 ; i++) {%>
                 <div class="row">
                     <%for(let j=0 ; j<26 ; j++){%>
-                        <div class="cell" contenteditable="true"></div>
+                        <div class="cell" contenteditable="true" r-id=<%=i%> c-id=<%=j%>></div>
                         <%}%>
                 </div>
                 <%}%>
@@ -36,6 +37,6 @@
     <div class="sheets">
         Sheets
     </div>
-
+<script src="./script.js"></script>
 </body>
 </html>

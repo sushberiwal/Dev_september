@@ -7,6 +7,7 @@
 // "start" : "electron ."
 // npm install ejs-electron
 // sudo npm install ejs-electron
+// npm install jquery
 
 // boiler plate code of electron
 const electron = require('electron');
