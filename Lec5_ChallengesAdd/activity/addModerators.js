@@ -28,7 +28,7 @@ let gBrowser;
         await Promise.all([  page.waitForNavigation({waitUntil:"networkidle0"})   , aTags[1].click() ]);
         let url = await page.url();
         await addModerators();
-        
+
     }
     catch(err){
         console.log(err);
@@ -48,30 +48,58 @@ async function clickAndWait(selector){
 async function addModerators(){
     await tab.waitForSelector(".backbone.block-center" , {visible:true});
     let allATags = await tab.$$(".backbone.block-center");
-    console.log(allATags);
+    // console.log(allATags);
     let allQuesLinks = [];
     for(let i=0 ; i<allATags.length ; i++){
         let quesLink = await tab.evaluate(  function(elem){  return elem.getAttribute("href")  }  , allATags[i] );
         quesLink = `https://www.hackerrank.com${quesLink}`;
-        console.log(quesLink);
+        // console.log(quesLink);
         allQuesLinks.push(quesLink);
     }
-    console.log(allQuesLinks);
+    // console.log(allQuesLinks);
     await addOnePageModerators(allQuesLinks);
-
-    // check if next button is not disabled 
+    
+    let allLis = await tab.$$(".pagination li");
+    let nextBtn = allLis[allLis.length-2];
+    
+    let isDisabled =  await tab.evaluate( function(elem){ return elem.classList.contains("disabled")  } , nextBtn);
+    
     // if disabled => return;
+    if(isDisabled){
+        return;
+    }
     // if not disabled
     // click on next button 
+    await Promise.all([ tab.waitForNavigation({waitUntil:"networkidle0"})  ,  nextBtn.click()]);
     // recursively call addModerators()
+    addModerators();
 }
 
+async function createModerator(newPage , link){
+    try{
+        await newPage.goto(link , {waitUntil:"networkidle0"});
+        await newPage.waitForSelector('li[data-tab="moderators"]' , {visible:true});
+        await Promise.all([newPage.waitForNavigation({waitUntil:"networkidle0"})   , newPage.click('li[data-tab="moderators"]')]);
+        await newPage.waitForSelector("#moderator" , {visible:true});
+        await newPage.type("#moderator" , "sushant");
+        await newPage.keyboard.press("Enter");
+        await newPage.click(".save-challenge.btn.btn-green");
+        await newPage.close();
+    }
+    catch(err){
+        console.log(err);
+    }
+}
 
 async function addOnePageModerators(allQuesLinks){
-    for(let i=0 ; i<allQuesLinks.length ; i++){
-        let newPage = await gBrowser.newPage();
-        newPage.goto(allQuesLinks[i]);
-        addModeratorOnOnePage(newPage);
+    try{
+        for(let i=0 ; i<allQuesLinks.length ; i++){
+            let newPage = await gBrowser.newPage();
+            createModerator(newPage , allQuesLinks[i]);
+        }
+    }
+    catch(err){
+        console.log(err);
     }
 }
 
