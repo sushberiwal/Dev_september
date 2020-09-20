@@ -5,7 +5,6 @@ let pw = "Archit@p1";
 
 
 (async function(){
-
     let browser = await puppeteer.launch({
         headless:false,
         slowMo : 50,
