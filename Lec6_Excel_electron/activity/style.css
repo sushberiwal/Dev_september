@@ -51,6 +51,7 @@ html,body{
     min-height: 25px;
     border: 1px solid;
     min-width: 70px;      
+    text-align: center;
 }
 .sheets{
 border: 1px solid green;
