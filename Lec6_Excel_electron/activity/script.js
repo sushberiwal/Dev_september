@@ -23,19 +23,47 @@ $("document").ready(function () {
     let cellObject = getCellObject(this);
     if (value != cellObject.value) {
       cellObject.value = value;
-    //   console.log(db);
+      // cell out of focus and value is changed on the cell from the ui
+      if(cellObject.formula){
+          removeFormula(cellObject);
+          $(".cell-formula").val("");
+      }
+
     }
   });
-
-  // formula
   $(".cell-formula").on("blur", function () {
     let formula = $(this).val();
     // console.log(formula);
     // falsy values => undefined , false , 0 , "",null
-    // if(formula){
-    addFormula(formula);
-    // }
-  });
+
+        let cellObject = getCellObject(lsc);
+        if(cellObject.formula != formula){
+            removeFormula(cellObject);
+            if(formula == ""){
+                $(lsc).text("");
+                return;
+            }
+        }
+        addFormula(formula); // => add formula to self => calculate value => update db value => update ui
+        console.log(db);
+        
+    });
+
+  // formula 
+  // removeFormula => cellObject.formula ="" => remove self from childrens of parents => clear parents 
+  function removeFormula(cellObject){
+      cellObject.formula=""; 
+      for(let i=0 ; i<cellObject.parents.length ; i++){
+          let parentName = cellObject.parents[i];
+          let {rowId , colId } = getRowIdColIdFromAddress(parentName);
+          let parentCellObject = db[rowId][colId];
+          let newChildrensOfParent = parentCellObject.childrens.filter( function(child){
+              return child != cellObject.name;
+          })
+          parentCellObject.childrens = newChildrensOfParent;
+      }
+      cellObject.parents = [];
+  }
 
   function addFormula(formula) {
     let cellObject = getCellObject(lsc);
@@ -60,6 +88,8 @@ $("document").ready(function () {
         console.log("Inside if" + fComp);
         let {rowId , colId } = getRowIdColIdFromAddress(fComp);
         let parentCellObject = db[rowId][colId];
+        parentCellObject.childrens.push(cellObject.name);
+        cellObject.parents.push(fComp);
         let value = parentCellObject.value;
         formula = formula.replace( fComp , value  );
       }
@@ -83,6 +113,8 @@ $("document").ready(function () {
           name: address,
           value: "",
           formula: "",
+          parents :[],
+          childrens :[]
         };
         row.push(cellObject);
       }
