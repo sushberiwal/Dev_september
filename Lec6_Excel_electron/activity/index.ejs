@@ -22,7 +22,19 @@
     </div>
     
     <div class="content">
-        
+        <div class="top-left-cell"></div>
+        <div class="top-row">
+            <%for(let j=0 ; j<26 ; j++){%>
+                <div class="top-row-cell" contenteditable="true"> <%= String.fromCharCode(65+j) %> </div>
+                <%}%>
+        </div>
+        <div class="left-col">
+            <% for(let i=0 ; i<100 ; i++) {%>
+                        <div class="left-col-cell" contenteditable="true" c-id=<%=i%>> <%=i+1%></div>
+                <%}%>
+        </div>
+
+
         <div class="cells">
             <% for(let i=0 ; i<100 ; i++) {%>
                 <div class="row">

@@ -38,11 +38,13 @@ html,body{
 .content{
     border: 1px solid;
     height: calc(100vh - 155px);
-    background: antiquewhite;
     overflow: auto;
+    position: relative;
 }
 .cells{
-
+    position: absolute;
+    top: 25px;
+    left: 30px;
 }
 .row{
     display: flex;
@@ -56,4 +58,38 @@ html,body{
 .sheets{
 border: 1px solid green;
     height: 35px;
+}
+
+.top-left-cell{
+    border: 1px solid;
+    height: 25px;
+    width: 30px;
+    background: lightgray;
+    position: absolute;
+    z-index: 3;
+}
+.top-row{
+    display: flex;
+    position: absolute;
+    left: 30px;
+    background: lightgreen;
+    z-index: 2;
+}
+.top-row-cell{
+    min-height: 25px;
+    border: 1px solid;
+    min-width: 70px;
+    text-align: center;
+}
+.left-col{
+    position: absolute;
+    top: 25px;
+    background: lightgreen;
+    z-index: 2;
+}
+.left-col-cell{
+    border: 1px solid;
+    height: 25px;
+    width: 30px;
+    text-align: center;
 }

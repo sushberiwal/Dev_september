@@ -1,10 +1,18 @@
 *{
     box-sizing: border-box;
 }
-.row{
-
+.box-one{
+    background: blue;
+    height: 200px;
+    width: 200px;
 }
-
-.cell{
-
+.box-two{
+    background: red;
+    height: 200px;
+    width: 200px;
+}
+.box-three{
+    background: green;
+    height: 200px;
+    width: 200px;
 }

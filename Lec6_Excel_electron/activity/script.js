@@ -5,9 +5,7 @@ $("document").ready(function () {
   let db;
   let lsc;
 
-  // console.log("jquery loaded !!!");
   $(".cell").on("click", function () {
-    console.log("clicked on cell");
     let rowId = Number($(this).attr("r-id"));
     let colId = Number($(this).attr("c-id"));
     let address = String.fromCharCode(65 + colId) + (rowId + 1);
@@ -18,7 +16,6 @@ $("document").ready(function () {
   $(".cell").on("blur", function () {
     lsc = this;
     let value = Number($(this).text());
-    // console.log(value);
     let cellObject = getCellObject(this);
     if (value != cellObject.value) {
       cellObject.value = value;
@@ -32,7 +29,6 @@ $("document").ready(function () {
   });
   $(".cell-formula").on("blur", function () {
     let formula = $(this).val();
-    // console.log(formula);
     // falsy values => undefined , false , 0 , "",null
         let cellObject = getCellObject(lsc);
         if(cellObject.formula != formula){
@@ -44,8 +40,23 @@ $("document").ready(function () {
         }
         addFormula(formula); // => add formula to self => calculate value => update db value => update ui
         updateChildrens(cellObject);
-        // console.log(db);
     });
+
+
+    // scrolling
+    $(".content").on("scroll" , function(){
+      let topOffset = $(this).scrollTop();
+      let leftOffset = $(this).scrollLeft();
+      // console.log("top" , topOffset)
+      // console.log("left" , leftOffset);
+
+      $(".top-left-cell , .top-row").css("top" , topOffset+"px");
+      $(".top-left-cell , .left-col").css("left" , leftOffset+"px");
+
+
+    })
+
+
 
   // formula 
   // removeFormula => cellObject.formula ="" => remove self from childrens of parents => clear parents 
@@ -66,13 +77,11 @@ $("document").ready(function () {
   function addFormula(formula) {
     let cellObject = getCellObject(lsc);
     cellObject.formula = formula;
-    // console.log(db);
     solveFormula(cellObject);
   }
 
   function solveFormula(cellObject) {
     let formula = cellObject.formula;
-    console.log(formula);
     // "( A1 + A2 )"
     // "( 10 + "
     let fComps = formula.split(" ");
@@ -83,7 +92,6 @@ $("document").ready(function () {
       let cellName = fComp[0];
       if (cellName >= "A" && cellName <= "Z") {
         //A1
-        console.log("Inside if" + fComp);
         let {rowId , colId } = getRowIdColIdFromAddress(fComp);
         let parentCellObject = db[rowId][colId];
         parentCellObject.childrens.push(cellObject.name);
@@ -134,7 +142,6 @@ $("document").ready(function () {
   function init() {
     db = [];
     let allRows = $(".cells .row");
-    // console.log(allRows.length);
     for (let i = 0; i < allRows.length; i++) {
       let row = [];
       let allColsInARow = $(allRows[i]).find(".cell");
@@ -152,8 +159,6 @@ $("document").ready(function () {
       }
       db.push(row);
     }
-
-    console.log(db);
   }
   init();
 
