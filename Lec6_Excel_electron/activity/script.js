@@ -1,11 +1,72 @@
 let $ = require("jquery");
+let fs = require("fs");
+let dialog = require("electron").remote.dialog;
+
 
 // jquery is used for dom manipulation
 $("document").ready(function () {
   let db;
   let lsc;
 
+  // new // open // save
+  $(".new").on("click" , function(){
+    db = [];
+    let allRows = $(".cells .row");
+    for (let i = 0; i < allRows.length; i++) {
+      let row = [];
+      let allColsInARow = $(allRows[i]).find(".cell");
+      for (let j = 0; j < allColsInARow.length; j++) {
+        // i=0 , j= 0
+        let address = getAddressFromRowIdColId(i, j);
+        let cellObject = {
+          name: address,
+          value: "",
+          formula: "",
+          parents :[],
+          childrens :[]
+        };
+        row.push(cellObject);
+        // i => j =>
+        $(allColsInARow[j]).html("");
+      }
+      db.push(row);
+    }
+    $(".address , .cell-formula").val("");
+  })
+
+  $(".open").on("click" , function(){
+    console.log("open clicked");
+    // db update and ui update 
+    let paths = dialog.showOpenDialogSync();
+    let path = paths[0];
+
+    let data = fs.readFileSync(path);
+    data = JSON.parse(data);
+    db = data;
+
+    let allRows = $(".cells .row");
+    for(let i=0 ; i<allRows.length ; i++){
+      let allCellsInARow = $(allRows[i]).find(".cell");
+      for(let j=0 ; j<allCellsInARow.length ; j++){
+        let value = db[i][j].value;
+        $(allCellsInARow[j]).html(value);
+      }
+    }
+  })
+
+  $(".save").on("click" , function(){
+      console.log("save clicked");
+      let path = dialog.showSaveDialogSync();
+      console.log(path);
+      let data = JSON.stringify(db);
+      fs.writeFileSync(path , data);
+      alert("File Saved !!");
+  })
+
+
+
   $(".cell").on("click", function () {
+    $(this).addClass("active");
     let rowId = Number($(this).attr("r-id"));
     let colId = Number($(this).attr("c-id"));
     let address = String.fromCharCode(65 + colId) + (rowId + 1);
@@ -14,6 +75,7 @@ $("document").ready(function () {
     $(".cell-formula").val(cellObject.formula);
   });
   $(".cell").on("blur", function () {
+    $(this).removeClass("active");
     lsc = this;
     let value = Number($(this).text());
     let cellObject = getCellObject(this);
@@ -140,25 +202,7 @@ $("document").ready(function () {
   }
 
   function init() {
-    db = [];
-    let allRows = $(".cells .row");
-    for (let i = 0; i < allRows.length; i++) {
-      let row = [];
-      let allColsInARow = $(allRows[i]).find(".cell");
-      for (let j = 0; j < allColsInARow.length; j++) {
-        // i=0 , j= 0
-        let address = getAddressFromRowIdColId(i, j);
-        let cellObject = {
-          name: address,
-          value: "",
-          formula: "",
-          parents :[],
-          childrens :[]
-        };
-        row.push(cellObject);
-      }
-      db.push(row);
-    }
+   $(".new").trigger("click");
   }
   init();
 
