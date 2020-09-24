@@ -15,7 +15,6 @@ $("document").ready(function () {
     let cellObject = getCellObject(this);
     $(".cell-formula").val(cellObject.formula);
   });
-
   $(".cell").on("blur", function () {
     lsc = this;
     let value = Number($(this).text());
@@ -28,14 +27,13 @@ $("document").ready(function () {
           removeFormula(cellObject);
           $(".cell-formula").val("");
       }
-
+      updateChildrens(cellObject);
     }
   });
   $(".cell-formula").on("blur", function () {
     let formula = $(this).val();
     // console.log(formula);
     // falsy values => undefined , false , 0 , "",null
-
         let cellObject = getCellObject(lsc);
         if(cellObject.formula != formula){
             removeFormula(cellObject);
@@ -45,8 +43,8 @@ $("document").ready(function () {
             }
         }
         addFormula(formula); // => add formula to self => calculate value => update db value => update ui
-        console.log(db);
-        
+        updateChildrens(cellObject);
+        // console.log(db);
     });
 
   // formula 
@@ -97,6 +95,40 @@ $("document").ready(function () {
     let value = eval(formula);
     cellObject.value = value;
     $(lsc).text(value);
+  }
+  function reCalculate(cellObject){
+    let formula = cellObject.formula;
+    // ( A1 + A2 )
+    let fComps = formula.split(" ");
+    for (let i = 0; i < fComps.length; i++) {
+      let fComp = fComps[i];
+      
+      let cellName = fComp[0];
+      if (cellName >= "A" && cellName <= "Z") {
+        
+        let {rowId , colId } = getRowIdColIdFromAddress(fComp);
+        let parentCellObject = db[rowId][colId];
+        let value = parentCellObject.value;
+        formula = formula.replace( fComp , value  );
+      }
+    }
+    // ( 10 + 20 )
+    let value = eval(formula);
+    cellObject.value = value;
+    let {rowId , colId } = getRowIdColIdFromAddress(cellObject.name);
+    $(`.cell[r-id=${rowId}][c-id=${colId}]`).text(value);
+  }
+
+  function updateChildrens(cellObject){
+    let childrens = cellObject.childrens;
+    for(let i=0 ; i<childrens.length ; i++){
+      let childName = childrens[i];
+      //B1
+      let {rowId , colId} = getRowIdColIdFromAddress(childName);
+      let childObject = db[rowId][colId];
+      reCalculate(childObject); // formula fetch => ( A1 + A2 ) => formula evaluation => db update => ui update
+      updateChildrens(childObject);
+    }
   }
 
   function init() {
