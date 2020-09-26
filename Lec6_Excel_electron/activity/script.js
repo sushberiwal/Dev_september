@@ -23,17 +23,28 @@ $("document").ready(function () {
           value: "",
           formula: "",
           parents :[],
-          childrens :[]
+          childrens :[],
+          cellFormatting:{ bold:false , underline:false , italic:false },
+          cellAlignment : "center",
+          fontSize : "16px",
+          textColor : "black",
+          background : "white"
         };
         row.push(cellObject);
         // i => j =>
         $(allColsInARow[j]).html("");
+        $(allColsInARow[j]).css("font-weight" , "normal");
+        $(allColsInARow[j]).css("font-style" , "normal");
+        $(allColsInARow[j]).css("text-decoration" ,"none");
+        $(allColsInARow[j]).css("text-align" , "center");
+        $(allColsInARow[j]).css("font-size" , "16px");
+        $(allColsInARow[j]).css("color" , "black");
+        $(allColsInARow[j]).css("background" , "white");
       }
       db.push(row);
     }
     $(".address , .cell-formula").val("");
   })
-
   $(".open").on("click" , function(){
     console.log("open clicked");
     // db update and ui update 
@@ -50,10 +61,16 @@ $("document").ready(function () {
       for(let j=0 ; j<allCellsInARow.length ; j++){
         let value = db[i][j].value;
         $(allCellsInARow[j]).html(value);
+        $(allCellsInARow[j]).css("font-weight" , db[i][j].cellFormatting.bold ? "bold" : "normal");
+        $(allCellsInARow[j]).css("font-style" , db[i][j].cellFormatting.italic ? "italic" : "normal");
+        $(allCellsInARow[j]).css("text-decoration" , db[i][j].cellFormatting.underline ? "underline" : "none");
+        $(allCellsInARow[j]).css("text-align" , `${db[i][j].cellAlignment}`);
+        $(allCellsInARow[j]).css("font-size" , `${db[i][j].font-size}`);
+        $(allCellsInARow[j]).css("color" , `${db[i][j].textColor}`);
+        $(allCellsInARow[j]).css("background" , `${db[i][j].background}`);
       }
     }
   })
-
   $(".save").on("click" , function(){
       console.log("save clicked");
       let path = dialog.showSaveDialogSync();
@@ -64,6 +81,70 @@ $("document").ready(function () {
   })
 
 
+
+  // text color // background color
+  $("#cell-text").on("change" , function(){
+    
+    let color = $(this).val();
+    $(lsc).css("color" , `${color}`);
+    let cellObject = getCellObject(lsc);
+    cellObject.textColor = color;
+  })
+  $("#cell-background").on("change" , function(){
+    let color = $(this).val();
+    $(lsc).css("background" , `${color}`);
+    let cellObject = getCellObject(lsc);
+    cellObject.background = color;
+  })
+  // bold // underline // italic
+  $(".bold").on("click" , function(){
+    let cellObject = getCellObject(lsc);
+    $(lsc).css("font-weight" , cellObject.cellFormatting.bold ?  "normal"  : "bold" );
+    cellObject.cellFormatting.bold = !cellObject.cellFormatting.bold;
+  })
+
+  $(".underline").on("click" , function(){
+    let cellObject = getCellObject(lsc);
+    $(lsc).css("text-decoration" , cellObject.cellFormatting.underline ?  "none"  : "underline" );
+    cellObject.cellFormatting.underline = !cellObject.cellFormatting.underline;
+  })
+
+  $(".italic").on("click" , function(){
+    let cellObject = getCellObject(lsc);
+    $(lsc).css("font-style" , cellObject.cellFormatting.italic ?  "normal"  : "italic" );
+    cellObject.cellFormatting.italic = !cellObject.cellFormatting.italic;
+  })
+
+  //left/center/right
+  $(".cell-alignment div").on("click" , function(){
+    let alignment = $(this).attr("class");
+    // center , left , right
+    $(lsc).css("text-align" , `${alignment}`);
+    let cellObject = getCellObject(lsc);
+    cellObject.cellAlignment = alignment;
+  })
+
+  // font size
+  $("#font-slider").on("change" , function(){
+    let value = $(this).val();
+    $(lsc).css("font-size" , `${value}px`);
+    let cellObject = getCellObject(lsc);
+    cellObject.fontSize = `${value}px`;
+  })
+  // file // home 
+  $("#file").on("click" , function(){
+    $("#home").removeClass("menu-active");
+    $(".home-menu-options").removeClass("menu-options-active");
+    $(this).addClass("menu-active");
+    $(".file-menu-options").addClass("menu-options-active");
+  })
+
+  $("#home").on("click" , function(){
+    $("#file").removeClass("menu-active");
+    $(".file-menu-options").removeClass("menu-options-active");
+    $(this).addClass("menu-active");
+    $(".home-menu-options").addClass("menu-options-active");
+  })
 
   $(".cell").on("click", function () {
     $(this).addClass("active");
@@ -77,7 +158,7 @@ $("document").ready(function () {
   $(".cell").on("blur", function () {
     $(this).removeClass("active");
     lsc = this;
-    let value = Number($(this).text());
+    let value = $(this).text();
     let cellObject = getCellObject(this);
     if (value != cellObject.value) {
       cellObject.value = value;
@@ -91,6 +172,10 @@ $("document").ready(function () {
   });
   $(".cell-formula").on("blur", function () {
     let formula = $(this).val();
+    // if( !Number($(lsc).text())){
+    //   alert("Cell Value is a string , Can't add formula");
+    //   return;
+    // }
     // falsy values => undefined , false , 0 , "",null
         let cellObject = getCellObject(lsc);
         if(cellObject.formula != formula){
@@ -117,9 +202,18 @@ $("document").ready(function () {
 
 
     })
+    
+    function setHeight(this){
+      let height = $(this).height();
+      // console.log(height);
+      let rowId = $(this).attr("r-id");
+      let leftCol = $(".left-col-cell")[rowId];
+      $(leftCol).height(height);
+    }
 
-
-
+    $(".cell").on("keyup" , function(){
+      setHeight(this);
+    })
   // formula 
   // removeFormula => cellObject.formula ="" => remove self from childrens of parents => clear parents 
   function removeFormula(cellObject){
@@ -158,7 +252,7 @@ $("document").ready(function () {
         let parentCellObject = db[rowId][colId];
         parentCellObject.childrens.push(cellObject.name);
         cellObject.parents.push(fComp);
-        let value = parentCellObject.value;
+        let value = Number(parentCellObject.value);
         formula = formula.replace( fComp , value  );
       }
     }
@@ -178,7 +272,7 @@ $("document").ready(function () {
         
         let {rowId , colId } = getRowIdColIdFromAddress(fComp);
         let parentCellObject = db[rowId][colId];
-        let value = parentCellObject.value;
+        let value = Number(parentCellObject.value);
         formula = formula.replace( fComp , value  );
       }
     }
