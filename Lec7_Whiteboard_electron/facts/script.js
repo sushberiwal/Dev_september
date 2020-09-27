@@ -21,7 +21,12 @@ btn.addEventListener("click" , function(){
     // console.log(value);
     if(value){
         let li = document.createElement("li");
-        li.innerText = value;
+        let p = document.createElement("p");
+        let close = document.createElement("button");
+        close.innerText = "Delete"
+        p.innerText = value;
+        li.appendChild(p);
+        li.appendChild(close);
         ul.appendChild(li);
     }
 })
