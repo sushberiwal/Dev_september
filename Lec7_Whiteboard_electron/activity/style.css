@@ -1,0 +1,26 @@
+*{
+   box-sizing: border-box;
+}
+
+body,html{
+    margin: 0px;
+    padding: 0px;
+}
+
+.toolbar{
+    border: 1px solid;
+    height: 100px;
+}
+
+.tools{
+
+}
+.content{
+    border: 1px solid;
+    height: calc(100vh - 100px);
+}
+
+/* .canvas{
+    height: 100%;
+    width: 100%;
+} */

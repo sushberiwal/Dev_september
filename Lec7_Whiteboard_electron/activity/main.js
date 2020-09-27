@@ -2,7 +2,7 @@
 // create main.js
 // npm init -y
 // npm install electron
-// in package.json file => add line => 
+// in package.json file => add line => "start": "electron ."
 
 const electron = require('electron');
 
