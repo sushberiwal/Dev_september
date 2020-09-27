@@ -11,12 +11,25 @@ body,html{
     /* border: 1px solid; */
     height: 100px;
     background: antiquewhite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tools{
+    display: flex;
+    width: 600px;
+    justify-content: space-between;
+}
+.tool{
 
+}
+.tool img{
+    height: 50px;
 }
 .content{
     /* border: 1px solid; */
     height: calc(100vh - 100px);
 }
+
+

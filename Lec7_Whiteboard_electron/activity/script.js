@@ -1,4 +1,6 @@
 let canvas = document.querySelector("#canvas");
+let points = [];
+
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
@@ -35,6 +37,13 @@ canvas.addEventListener("mousedown" , function(e){
     let y = e.clientY-top;
     ctx.beginPath();
     ctx.moveTo(x,y);
+
+    let point = {
+        id : "md",
+        x : x,
+        y : y
+    }
+    points.push(point);
 })
 
 canvas.addEventListener("mousemove" , function(e){
@@ -44,9 +53,16 @@ canvas.addEventListener("mousemove" , function(e){
         let y = e.clientY- top;
         ctx.lineTo(x,y);
         ctx.stroke();
+        let point = {
+            id : "mm",
+            x : x,
+            y : y
+        }
+        points.push(point);
     }
 })
 
 canvas.addEventListener("mouseup" , function(e){
     isPenDown = false;
+    console.log(points);
 })
