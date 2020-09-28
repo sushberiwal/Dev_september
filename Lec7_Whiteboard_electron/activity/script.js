@@ -1,6 +1,6 @@
 let canvas = document.querySelector("#canvas");
 let points = [];
-
+let redoPoints = [];
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
@@ -9,6 +9,7 @@ canvas.width = window.innerWidth;
 window.addEventListener("resize" , function(){
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
+    reDraw();
 })
 
 
@@ -31,6 +32,7 @@ ctx.fillStyle = "black";
 let isPenDown = false;
 
 canvas.addEventListener("mousedown" , function(e){
+    
     isPenDown = true;
     let {top , left} = canvas.getBoundingClientRect();
     let x = e.clientX-left;
@@ -48,6 +50,7 @@ canvas.addEventListener("mousedown" , function(e){
 
 canvas.addEventListener("mousemove" , function(e){
     if(isPenDown){
+        redoPoints = [];
         let {top , left} = canvas.getBoundingClientRect();
         let x = e.clientX - left;
         let y = e.clientY- top;
