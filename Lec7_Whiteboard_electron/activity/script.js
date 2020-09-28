@@ -17,6 +17,8 @@ window.addEventListener("resize" , function(){
 let ctx = canvas.getContext('2d');
 // x , y , width , height
 ctx.fillStyle = "black";
+ctx.lineCap = 'round';
+ctx.miterLimit = 1;
 // ctx.fillRect(10, 10, 100, 100);
 
 // ctx.beginPath();
@@ -43,7 +45,9 @@ canvas.addEventListener("mousedown" , function(e){
     let point = {
         id : "md",
         x : x,
-        y : y
+        y : y,
+        color : ctx.strokeStyle,
+        width : ctx.lineWidth
     }
     points.push(point);
 })
@@ -59,7 +63,9 @@ canvas.addEventListener("mousemove" , function(e){
         let point = {
             id : "mm",
             x : x,
-            y : y
+            y : y,
+            color : ctx.strokeStyle,
+            width : ctx.lineWidth
         }
         points.push(point);
     }
