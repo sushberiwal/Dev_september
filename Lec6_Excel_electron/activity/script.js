@@ -203,10 +203,10 @@ $("document").ready(function () {
 
     })
     
-    function setHeight(this){
-      let height = $(this).height();
+    function setHeight(elem){
+      let height = $(elem).height();
       // console.log(height);
-      let rowId = $(this).attr("r-id");
+      let rowId = $(elem).attr("r-id");
       let leftCol = $(".left-col-cell")[rowId];
       $(leftCol).height(height);
     }

@@ -92,3 +92,37 @@ body,html{
 .yellow{
     background: yellow;
 }
+
+.sticky{
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    /* background: darkslategrey; */
+    height: 186px;
+    width: 233px;
+}
+
+.sticky-header{
+    background: antiquewhite;
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.minimize{
+    height: 25px;
+    width: 25px;
+    background: lightgreen;
+    border-radius: 50px;
+}
+
+.close{
+    height: 25px;
+    width: 25px;
+    background: red;
+    border-radius: 50px;
+}
+.sticky-content{
+    height: 160px;
+}
