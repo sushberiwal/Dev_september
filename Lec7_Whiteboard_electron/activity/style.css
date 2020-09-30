@@ -125,4 +125,10 @@ body,html{
 }
 .sticky-content{
     height: 160px;
+    width: 233px;
+}
+
+.sticky-img{
+    height: 100%;
+    width: 100%;
 }
