@@ -4,6 +4,10 @@
 // npm install electron
 // in package.json file => add line => "start": "electron ."
 
+
+// for packaging =>
+// npm install electron-packager
+
 const electron = require('electron');
 
 const app = electron.app;
@@ -21,8 +25,9 @@ function createWindow(){
 
     win.loadFile("./index.html").then(function(){
         win.maximize();
+        win.removeMenu();
     });
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
