@@ -16,8 +16,6 @@ imgUpload.addEventListener("change" , function(){
     }
 })
 
-
-
 download.addEventListener("click" , function(){
     let url = canvas.toDataURL("image/png");
     // anchor tag
